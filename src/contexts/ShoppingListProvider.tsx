@@ -9,11 +9,14 @@ type ShoppingListItem = {
 
 type ShoppingListContextType = {
   shoppingListItems: ShoppingListItem[];
+  addItem: (name: string) => void;
+  deleteItem: (id: string) => void;
+  deleteAllItems: () => void;
 };
 
-const ShoppingListContext = React.createContext<ShoppingListContextType>({
-  shoppingListItems: [],
-});
+const ShoppingListContext = React.createContext<ShoppingListContextType>(
+  {} as ShoppingListContextType,
+);
 
 export const useShoppingList = (): ShoppingListContextType => {
   return useContext(ShoppingListContext);
