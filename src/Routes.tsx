@@ -5,11 +5,9 @@ import {ShoppingList} from './components/ShoppingList';
 import {AddNewItem} from './components/AddNewItem';
 import {ParamList} from './ParamList';
 
-interface RoutesProps {}
-
 const Stack = createStackNavigator<ParamList>();
 
-export const Routes: React.FC<RoutesProps> = () => {
+export const Routes: React.FC = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName="ShoppingList">
