@@ -14,22 +14,40 @@ interface ShoppingListItemProps {
 export const ShoppingListItem: React.FC<ShoppingListItemProps> = ({item}) => {
   const [showDeleteIcon, setShowDeleteIcon] = useState(false);
   const [isComplete, setIsComplete] = useState(false);
-  const {toggleItemComplete} = useShoppingList();
+  const {toggleItemComplete, deleteItem} = useShoppingList();
 
   useEffect(() => {
     setIsComplete(item.isComplete);
   }, [item.isComplete]);
 
   return (
-    <TouchableOpacity style={styles.wrap}>
+    <TouchableOpacity
+      style={styles.wrap}
+      onLongPress={() => {
+        setShowDeleteIcon((prevState) => !prevState);
+      }}>
+      {console.log(showDeleteIcon)}
       <Text>{item.name}</Text>
-      <Feather
-        name={isComplete ? 'check-circle' : 'circle'}
-        size={30}
-        onPress={() => {
-          toggleItemComplete(item.id);
-        }}
-      />
+      {showDeleteIcon ? (
+        <Feather
+          name="trash-2"
+          size={30}
+          color="firebrick"
+          onPress={() => {
+            deleteItem(item.id);
+          }}
+        />
+      ) : (
+        <Feather
+          name={isComplete ? 'check-circle' : 'circle'}
+          size={30}
+          color="#525252"
+          onPress={() => {
+            toggleItemComplete(item.id);
+            console.log(12);
+          }}
+        />
+      )}
     </TouchableOpacity>
   );
 };
