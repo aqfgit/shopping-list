@@ -3,6 +3,7 @@ import {Button, Text, View} from 'react-native';
 import {FlatList} from 'react-native-gesture-handler';
 import {useShoppingList} from '../contexts/ShoppingListProvider';
 import {NavProps} from '../ParamList';
+import {ShoppingListItem} from './ShoppingListItem';
 
 export const ShoppingList: React.FC<NavProps<'ShoppingList'>> = ({
   navigation,
@@ -12,7 +13,7 @@ export const ShoppingList: React.FC<NavProps<'ShoppingList'>> = ({
     <View>
       <FlatList
         data={shoppingListItems}
-        renderItem={({item}) => <Text key={item.id}>{item.name}</Text>}
+        renderItem={({item}) => <ShoppingListItem item={item} />}
       />
       <Button
         title="add new item"

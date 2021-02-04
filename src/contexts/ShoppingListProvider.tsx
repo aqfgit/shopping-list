@@ -9,9 +9,10 @@ export type ShoppingListItemType = {
 
 type ShoppingListContextType = {
   shoppingListItems: ShoppingListItemType[];
-  addItem: (name: string) => void;
-  deleteItem: (id: string) => void;
-  deleteAllItems: () => void;
+  addItem: (name: string) => Promise<void>;
+  deleteItem: (id: string) => Promise<void>;
+  deleteAllItems: () => Promise<void>;
+  toggleItemComplete: (id: string) => Promise<void>;
 };
 
 const ShoppingListContext = React.createContext<ShoppingListContextType>(
@@ -80,11 +81,28 @@ export const ShoppingListProvider: React.FC = ({children}) => {
     }
   };
 
+  const toggleItemComplete = async (id: string): Promise<void> => {
+    const indexOfTheItem = shoppingListItems.findIndex(
+      (item: ShoppingListItemType) => item.id === id,
+    );
+    const updatedItems = shoppingListItems.slice(0);
+    try {
+      updatedItems[indexOfTheItem].isComplete = !updatedItems[indexOfTheItem]
+        .isComplete;
+      const jsonItems = JSON.stringify(updatedItems);
+      await AsyncStorage.setItem('notes', jsonItems);
+      setShoppingListItems(updatedItems);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   const value = {
     shoppingListItems,
     addItem,
     deleteItem,
     deleteAllItems,
+    toggleItemComplete,
   };
   return (
     <ShoppingListContext.Provider value={value}>
