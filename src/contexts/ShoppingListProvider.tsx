@@ -1,14 +1,14 @@
-import React, {useContext, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-type ShoppingListItem = {
+export type ShoppingListItemType = {
   id: string;
   name: string;
   isComplete: boolean;
 };
 
 type ShoppingListContextType = {
-  shoppingListItems: ShoppingListItem[];
+  shoppingListItems: ShoppingListItemType[];
   addItem: (name: string) => void;
   deleteItem: (id: string) => void;
   deleteAllItems: () => void;
@@ -24,17 +24,33 @@ export const useShoppingList = (): ShoppingListContextType => {
 
 export const ShoppingListProvider: React.FC = ({children}) => {
   const [shoppingListItems, setShoppingListItems] = useState<
-    ShoppingListItem[]
+    ShoppingListItemType[]
   >([]);
+  const ASYNC_STORAGE_ITMES_NAME = 'shoppingListItems';
+
+  useEffect(() => {
+    getDataFromAsyncStorage();
+  }, []);
+
+  const getDataFromAsyncStorage = async () => {
+    try {
+      const storageItems = await AsyncStorage.getItem(ASYNC_STORAGE_ITMES_NAME);
+      setShoppingListItems(
+        storageItems != null ? JSON.parse(storageItems) : [],
+      );
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   const addItem = async (name: string): Promise<void> => {
     try {
       const newItem = {id: Math.random() + '', name, isComplete: false};
-      const updatedItems = (shoppingListItems as ShoppingListItem[]).concat(
+      const updatedItems = (shoppingListItems as ShoppingListItemType[]).concat(
         newItem,
       );
       const jsonItems = JSON.stringify(updatedItems);
-      await AsyncStorage.setItem('shoppingListItems', jsonItems);
+      await AsyncStorage.setItem(ASYNC_STORAGE_ITMES_NAME, jsonItems);
       setShoppingListItems(updatedItems);
     } catch (error) {
       console.error(error);
@@ -42,11 +58,11 @@ export const ShoppingListProvider: React.FC = ({children}) => {
   };
 
   const deleteItem = async (id: string): Promise<void> => {
-    const getRemainingItems = (item: ShoppingListItem) => item.id !== id;
+    const getRemainingItems = (item: ShoppingListItemType) => item.id !== id;
     try {
       const updatedItems = shoppingListItems.filter(getRemainingItems);
       const jsonItems = JSON.stringify(updatedItems);
-      await AsyncStorage.setItem('shoppingListItems', jsonItems);
+      await AsyncStorage.setItem(ASYNC_STORAGE_ITMES_NAME, jsonItems);
       setShoppingListItems((prevState) => {
         return prevState.filter(getRemainingItems);
       });
@@ -57,7 +73,7 @@ export const ShoppingListProvider: React.FC = ({children}) => {
 
   const deleteAllItems = async (): Promise<void> => {
     try {
-      await AsyncStorage.removeItem('shoppingListItems');
+      await AsyncStorage.removeItem(ASYNC_STORAGE_ITMES_NAME);
       setShoppingListItems([]);
     } catch (error) {
       console.error(error);
