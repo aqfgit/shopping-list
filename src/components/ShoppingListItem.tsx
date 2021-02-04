@@ -26,7 +26,6 @@ export const ShoppingListItem: React.FC<ShoppingListItemProps> = ({item}) => {
       onLongPress={() => {
         setShowDeleteIcon((prevState) => !prevState);
       }}>
-      {console.log(showDeleteIcon)}
       <Text>{item.name}</Text>
       {showDeleteIcon ? (
         <Feather
@@ -44,7 +43,6 @@ export const ShoppingListItem: React.FC<ShoppingListItemProps> = ({item}) => {
           color="#525252"
           onPress={() => {
             toggleItemComplete(item.id);
-            console.log(12);
           }}
         />
       )}

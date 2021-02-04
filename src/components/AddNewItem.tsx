@@ -1,22 +1,34 @@
 import React, {useState} from 'react';
-import {Button, Text, View} from 'react-native';
+import {Alert, Button, Text, View} from 'react-native';
 import {TextInput} from 'react-native-gesture-handler';
 import {useShoppingList} from '../contexts/ShoppingListProvider';
 import {NavProps} from '../ParamList';
+import {Autocomplete} from './Autocomplete';
+import {StyleSheet} from 'react-native';
 
 export const AddNewItem: React.FC<NavProps<'NewItem'>> = ({navigation}) => {
   const [inputValue, setInputValue] = useState('');
   const {addItem} = useShoppingList();
+
   return (
     <View>
       <Text>Add a new item</Text>
-      <TextInput
-        value={inputValue}
-        onChangeText={(text) => setInputValue(text)}
-      />
+
+      <Autocomplete inputValue={inputValue} setInputValue={setInputValue}>
+        <TextInput
+          style={styles.input}
+          value={inputValue}
+          onChangeText={(text) => setInputValue(text)}
+          autoFocus={true}
+        />
+      </Autocomplete>
       <Button
         title="Add new item"
         onPress={() => {
+          if (inputValue.trim().length === 0) {
+            Alert.alert('The input cannot be empty!');
+            return;
+          }
           addItem(inputValue);
           navigation.navigate('ShoppingList');
         }}
@@ -24,3 +36,10 @@ export const AddNewItem: React.FC<NavProps<'NewItem'>> = ({navigation}) => {
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  input: {
+    borderWidth: 1,
+    borderColor: '#000000',
+  },
+});
