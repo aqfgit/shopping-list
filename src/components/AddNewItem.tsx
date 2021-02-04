@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {Alert, Button, Text, View} from 'react-native';
-import {TextInput} from 'react-native-gesture-handler';
+import {TextInput, TouchableOpacity} from 'react-native-gesture-handler';
 import {useShoppingList} from '../contexts/ShoppingListProvider';
 import {NavProps} from '../ParamList';
 import {Autocomplete} from './Autocomplete';
@@ -11,9 +11,7 @@ export const AddNewItem: React.FC<NavProps<'NewItem'>> = ({navigation}) => {
   const {addItem} = useShoppingList();
 
   return (
-    <View>
-      <Text>Add a new item</Text>
-
+    <View style={styles.wrap}>
       <Autocomplete inputValue={inputValue} setInputValue={setInputValue}>
         <TextInput
           style={styles.input}
@@ -22,24 +20,44 @@ export const AddNewItem: React.FC<NavProps<'NewItem'>> = ({navigation}) => {
           autoFocus={true}
         />
       </Autocomplete>
-      <Button
-        title="Add new item"
-        onPress={() => {
-          if (inputValue.trim().length === 0) {
-            Alert.alert('The input cannot be empty!');
-            return;
-          }
-          addItem(inputValue);
-          navigation.navigate('ShoppingList');
-        }}
-      />
+      <View>
+        <TouchableOpacity
+          onPress={() => {
+            if (inputValue.trim().length === 0) {
+              Alert.alert('The input cannot be empty!');
+              return;
+            }
+            addItem(inputValue);
+            navigation.navigate('ShoppingList');
+          }}
+          style={styles.button}>
+          <Text style={styles.buttonText}>Confirm</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
+  wrap: {
+    margin: 10,
+  },
+  button: {
+    marginTop: 20,
+    padding: 10,
+    backgroundColor: '#175691',
+    borderRadius: 10,
+  },
+  buttonText: {
+    color: 'white',
+    textAlign: 'center',
+    fontSize: 17,
+  },
   input: {
     borderWidth: 1,
+    borderRadius: 5,
+    padding: 10,
+    fontSize: 16,
     borderColor: '#000000',
   },
 });
