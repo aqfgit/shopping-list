@@ -65,6 +65,7 @@ const styles = StyleSheet.create({
     borderColor: '#777777',
     borderBottomLeftRadius: 5,
     borderBottomRightRadius: 5,
+    backgroundColor: '#f1f1f1',
   },
   listItem: {
     borderBottomWidth: 1,

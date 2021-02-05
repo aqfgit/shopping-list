@@ -59,5 +59,6 @@ const styles = StyleSheet.create({
     padding: 10,
     fontSize: 16,
     borderColor: '#000000',
+    backgroundColor: '#ffffff',
   },
 });
