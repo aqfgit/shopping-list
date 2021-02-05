@@ -26,7 +26,7 @@ export const ShoppingListItem: React.FC<ShoppingListItemProps> = ({item}) => {
       onLongPress={() => {
         setShowDeleteIcon((prevState) => !prevState);
       }}>
-      <Text>{item.name}</Text>
+      <Text style={styles.text}>{item.name}</Text>
       {showDeleteIcon ? (
         <Feather
           name="trash-2"
@@ -60,5 +60,8 @@ const styles = StyleSheet.create({
     paddingVertical: 15,
     paddingHorizontal: 20,
     borderColor: '#d3d3d3',
+  },
+  text: {
+    maxWidth: '80%',
   },
 });
