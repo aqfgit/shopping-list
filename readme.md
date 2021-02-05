@@ -1,6 +1,6 @@
 # Shopping list app
 
-Simple shopping list app created with React Native. It was made as a recruitment task to demonstrate my Typescript and React Native skills. Prior to making this project I had little to no knwoladge of those technologies. Finishing this app, hovever, gave me a better insight into how to use those tools and what makes them powerful.
+Simple shopping list app created with React Native. It was made as a recruitment task to demonstrate my Typescript and React Native skills. Prior to making this project, I had little to no knowledge of those technologies. Finishing this app, however, gave me a better insight into how to use those tools and what makes them powerful.
 
 Created for Android.
 
@@ -33,7 +33,16 @@ Sometimes you may need to reset or clear the React Native packager's cache. To d
 $ npm start -- --reset-cache
 ```
 
-You can also run it on the Android emulator:
+On Linux you can also encounter the following error:
+
+```
+Error: ENOSPC: System limit for number of file watchers reached,
+watch
+```
+
+[Here](https://klequis.io/error-enospc-system-limit-for-number-of-file-watchers-reached/?fbclid=IwAR2SvDC025RrW5PyuLr4PghMxCOM_mXw0csKbvGex9VdI_Nr3rFWt8ozy04) you can see the solution for it.
+
+You can also run the on the Android emulator:
 
 ```sh
 $ npm run android
