@@ -23,7 +23,9 @@ export const Autocomplete: React.FC<AutocompleteProps> = ({
     }
     const filterAutocompleteItems = () => {
       const newAutocompleteItems = shoppingListItems
-        .filter((item) => item.name.startsWith(inputValue))
+        .filter((item) =>
+          item.name.toLowerCase().startsWith(inputValue.toLowerCase()),
+        )
         .map((item) => item.name);
       setAutocompleteItems(Array.from(new Set(newAutocompleteItems)));
     };
