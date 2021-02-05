@@ -11,6 +11,13 @@ Created for Android.
 
 ## Launch
 
+Clone the repo:
+
+```sh
+$ git clone https://github.com/aqfgit/shopping-list.git
+$ cd shopping-list
+```
+
 To run the app in development mode:
 
 ```sh
