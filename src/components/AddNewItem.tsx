@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {Alert, Button, Text, View} from 'react-native';
+import {Alert, Text, View} from 'react-native';
 import {TextInput, TouchableOpacity} from 'react-native-gesture-handler';
 import {useShoppingList} from '../contexts/ShoppingListProvider';
 import {NavProps} from '../ParamList';

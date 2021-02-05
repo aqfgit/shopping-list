@@ -9,6 +9,7 @@ export type ShoppingListItemType = {
 
 type ShoppingListContextType = {
   shoppingListItems: ShoppingListItemType[];
+  autocompleteItemNames: string[];
   addItem: (name: string) => Promise<void>;
   deleteItem: (id: string) => Promise<void>;
   deleteAllItems: () => Promise<void>;
@@ -27,7 +28,11 @@ export const ShoppingListProvider: React.FC = ({children}) => {
   const [shoppingListItems, setShoppingListItems] = useState<
     ShoppingListItemType[]
   >([]);
-  const ASYNC_STORAGE_ITMES_NAME = 'shoppingListItems';
+  const [autocompleteItemNames, setAutocompleteItemNames] = useState<string[]>(
+    [],
+  );
+  const ASYNC_STORAGE_ITEMS_KEY = 'shoppingListItems';
+  const ASYNC_STORAGE_AUTOCOMPLETE_KEY = 'autocompleteItemNames';
 
   useEffect(() => {
     getDataFromAsyncStorage();
@@ -35,9 +40,21 @@ export const ShoppingListProvider: React.FC = ({children}) => {
 
   const getDataFromAsyncStorage = async () => {
     try {
-      const storageItems = await AsyncStorage.getItem(ASYNC_STORAGE_ITMES_NAME);
+      const storageShoppingListItems = await AsyncStorage.getItem(
+        ASYNC_STORAGE_ITEMS_KEY,
+      );
+      const storageAutocompleteNames = await AsyncStorage.getItem(
+        ASYNC_STORAGE_AUTOCOMPLETE_KEY,
+      );
       setShoppingListItems(
-        storageItems != null ? JSON.parse(storageItems) : [],
+        storageShoppingListItems != null
+          ? JSON.parse(storageShoppingListItems)
+          : [],
+      );
+      setAutocompleteItemNames(
+        storageAutocompleteNames != null
+          ? JSON.parse(storageAutocompleteNames)
+          : [],
       );
     } catch (error) {
       console.error(error);
@@ -51,8 +68,13 @@ export const ShoppingListProvider: React.FC = ({children}) => {
         newItem,
       );
       const jsonItems = JSON.stringify(updatedItems);
-      await AsyncStorage.setItem(ASYNC_STORAGE_ITMES_NAME, jsonItems);
+      await AsyncStorage.setItem(ASYNC_STORAGE_ITEMS_KEY, jsonItems);
       setShoppingListItems(updatedItems);
+
+      const updatedAutocompleteNames = autocompleteItemNames.concat(name);
+      const jsonNames = JSON.stringify(updatedAutocompleteNames);
+      await AsyncStorage.setItem(ASYNC_STORAGE_AUTOCOMPLETE_KEY, jsonNames);
+      setAutocompleteItemNames(updatedAutocompleteNames);
     } catch (error) {
       console.error(error);
     }
@@ -63,7 +85,7 @@ export const ShoppingListProvider: React.FC = ({children}) => {
     try {
       const updatedItems = shoppingListItems.filter(getRemainingItems);
       const jsonItems = JSON.stringify(updatedItems);
-      await AsyncStorage.setItem(ASYNC_STORAGE_ITMES_NAME, jsonItems);
+      await AsyncStorage.setItem(ASYNC_STORAGE_ITEMS_KEY, jsonItems);
       setShoppingListItems((prevState) => {
         return prevState.filter(getRemainingItems);
       });
@@ -74,7 +96,7 @@ export const ShoppingListProvider: React.FC = ({children}) => {
 
   const deleteAllItems = async (): Promise<void> => {
     try {
-      await AsyncStorage.removeItem(ASYNC_STORAGE_ITMES_NAME);
+      await AsyncStorage.removeItem(ASYNC_STORAGE_ITEMS_KEY);
       setShoppingListItems([]);
     } catch (error) {
       console.error(error);
@@ -99,6 +121,7 @@ export const ShoppingListProvider: React.FC = ({children}) => {
 
   const value = {
     shoppingListItems,
+    autocompleteItemNames,
     addItem,
     deleteItem,
     deleteAllItems,

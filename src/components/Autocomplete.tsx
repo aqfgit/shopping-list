@@ -1,4 +1,4 @@
-import React, {Children, useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import {FlatList, TouchableOpacity} from 'react-native-gesture-handler';
 import {useShoppingList} from '../contexts/ShoppingListProvider';
@@ -13,32 +13,31 @@ export const Autocomplete: React.FC<AutocompleteProps> = ({
   setInputValue,
   children,
 }) => {
-  const {shoppingListItems} = useShoppingList();
-  const [autocompleteItems, setAutocompleteItems] = useState<string[]>([]);
+  const {autocompleteItemNames} = useShoppingList();
+  const [autocompleteResults, setAutocompleteResults] = useState<string[]>([]);
 
   useEffect(() => {
     if (inputValue.trim().length === 0) {
-      setAutocompleteItems([]);
+      setAutocompleteResults([]);
       return;
     }
     const filterAutocompleteItems = () => {
-      const newAutocompleteItems = shoppingListItems
-        .filter((item) =>
-          item.name.toLowerCase().startsWith(inputValue.toLowerCase()),
-        )
-        .map((item) => item.name);
-      setAutocompleteItems(Array.from(new Set(newAutocompleteItems)));
+      const newAutocompleteItems = autocompleteItemNames.filter((item) =>
+        item.toLowerCase().startsWith(inputValue.toLowerCase()),
+      );
+
+      setAutocompleteResults(Array.from(new Set(newAutocompleteItems)));
     };
     filterAutocompleteItems();
-  }, [inputValue, shoppingListItems, setAutocompleteItems]);
+  }, [inputValue, setAutocompleteResults, autocompleteItemNames]);
 
   return (
     <View>
       {children}
 
       <FlatList
-        style={autocompleteItems.length > 0 ? styles.list : styles.emptyList}
-        data={autocompleteItems}
+        style={autocompleteResults.length > 0 ? styles.list : styles.emptyList}
+        data={autocompleteResults}
         renderItem={({item}) => (
           <TouchableOpacity
             style={styles.listItem}

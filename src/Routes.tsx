@@ -1,5 +1,5 @@
 import React from 'react';
-import {createStackNavigator, HeaderTitle} from '@react-navigation/stack';
+import {createStackNavigator} from '@react-navigation/stack';
 import {NavigationContainer} from '@react-navigation/native';
 import {ShoppingList} from './components/ShoppingList';
 import {AddNewItem} from './components/AddNewItem';
